@@ -1,10 +1,7 @@
-﻿using FluentValidation.Results;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Superhero.Api.Entities;
 using Superhero.Api.Interfaces;
 using Superhero.Api.Models;
-using Superhero.Api.Validators;
-using System.Text.Json;
 
 namespace Superhero.Api.Controllers
 {
@@ -20,80 +17,60 @@ namespace Superhero.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetSuperheroes()
+        public async Task<Result<List<Hero>>> GetSuperheroes(string? searchTerm)
         {
-            return Ok(new Result<List<Hero>>()
-            {
-                Data = await _heroRepository.GetHeroes(),
-                IsSuccess = true,
-                Message = "Success"
-            });
+            return Result<List<Hero>>.Success(await _heroRepository.GetHeroes(searchTerm));
         }
 
         [HttpGet("get-hero/{id}")]
-        public async Task<IActionResult> GetSuperheroById(int id)
+        public async Task<Result<Hero>> GetSuperheroById(int id)
         {
             var hero = await _heroRepository.GetHeroById(id);
-            return Ok(new Result<Hero>()
+            if(hero is null)
             {
-                Data = hero,
-                IsSuccess = true,
-                Message = hero is not null ? "Success" : "Not Found"
-            });
+                return Result<Hero>.Failure("Hero not found.");
+            }
+
+            return Result<Hero>.Success(hero);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateSuperhero(Hero hero)
+        public async Task<Result<Hero>> CreateSuperhero(Hero hero)
         {
             _heroRepository.AddHero(hero);
-            bool res = await _heroRepository.Save();
+            await _heroRepository.Save();
 
-            return Ok(new Result<Hero>()
-            {
-                Data = res ? hero : null,
-                IsSuccess = res ? true : false,
-                Message = res ? "Success" : "Failed"
-            });
+            return Result<Hero>.Success(hero);
         }
 
         [HttpPut("update-hero/{id}")]
-        public async Task<IActionResult> UpdateSuperhero(int id, Hero hero)
+        public async Task<Result<string>> UpdateSuperhero(int id, Hero hero)
         {
             var heroResult = await _heroRepository.GetHeroById(id);
             if(heroResult is null)
             {
-                return Ok(heroResult);
+                return Result<string>.Failure("Hero not found.");
             } 
 
             _heroRepository.UpdateHero(hero);
-            bool res = await _heroRepository.Save();
+            await _heroRepository.Save();
 
-            return Ok(new Result<Hero>()
-            {
-                Data = res ? heroResult : null,
-                IsSuccess = res ? true : false,
-                Message = res ? "Successfully updated hero." : "Failed to update hero."
-            });
+            return Result<string>.Success("Successfully updated hero.");
         }
 
         [HttpDelete("remove-hero/{id}")]
-        public async Task<IActionResult> DeleteSupehero(int id)
+        public async Task<Result<string>> DeleteSupehero(int id)
         {
             var heroResult = await _heroRepository.GetHeroById(id);
             if (heroResult is null)
             {
-                return Ok(heroResult);
+                return Result<string>.Failure("Hero not found.");
             }
 
             _heroRepository.RemoveHero(heroResult);
-            bool res = await _heroRepository.Save();
-            
-            return Ok(new Result<Hero>()
-            {
-                Data = res ? heroResult : null,
-                IsSuccess = res ? true : false,
-                Message = res ? "Successfully deleted hero." : "Failed to delete hero."
-            });
+            await _heroRepository.Save();
+
+            return Result<string>.Success("Sucessfully deleted hero.");
         }
     }
 }

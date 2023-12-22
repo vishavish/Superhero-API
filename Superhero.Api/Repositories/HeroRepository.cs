@@ -14,21 +14,20 @@ namespace Superhero.Api.Repositories
             _context = context;
         }
 
+        #pragma warning disable CS8603
         public async Task<Hero> GetHeroById(int id)
         {
-            var hero = await _context.Heroes.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
-            if (hero is null)
-            {
-                return null;
-            }
-
-            return hero;
+            return await _context.Heroes.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
         }
 
-        public async Task<List<Hero>> GetHeroes()
+        public async Task<List<Hero>> GetHeroes(string? searchTerm)
         {
-            return await _context.Heroes.AsNoTracking().ToListAsync();
+            return await _context.Heroes
+                    .AsNoTracking()
+                    .Where(h => h.HeroName!.Contains(searchTerm ?? ""))
+                    .ToListAsync();
         }
+
         public async Task<bool> Save()
         {
             return (await _context.SaveChangesAsync() > 0);

@@ -15,7 +15,6 @@ namespace Superhero.Api.Validators
                 .NotEmpty().WithMessage("Superpower is required.");
 
             RuleFor(h => h.PowerLevel)
-                //.NotEmpty().WithMessage("Power Level is required.")
                 .GreaterThan(0).WithMessage("Invalid power level.");
         }
     }

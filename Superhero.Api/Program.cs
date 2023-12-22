@@ -2,12 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Superhero.Api.Context;
 using Superhero.Api.Interfaces;
 using Superhero.Api.Repositories;
-using FluentValidation;
-using System.Reflection;
-using Superhero.Api.Filters;
 using Superhero.Api.Middlewares;
-using System.Net.Sockets;
-using FluentValidation.AspNetCore;
 using Superhero.Api.Extension;
 
 var builder = WebApplication.CreateBuilder(args);
