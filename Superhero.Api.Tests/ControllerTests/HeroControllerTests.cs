@@ -27,7 +27,7 @@ namespace Superhero.Api.Tests.ControllerTests
             var controller = new SuperheroController(_heroRepository);
 
             //Act
-            var result = await controller.GetSuperheroes();
+            var result = await controller.GetSuperheroes(string.Empty);
 
             //Assert
             result.Should().BeOfType<OkObjectResult>();
