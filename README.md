@@ -11,3 +11,4 @@ Tech Used:
 * FluentAssertion
 * xUnit
 * FakeItEasy
+* NSubstitute
