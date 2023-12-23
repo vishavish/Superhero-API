@@ -9,11 +9,13 @@ namespace Superhero.Api.Controllers
     [Route("api/[controller]")]
     public class SuperheroController : ControllerBase
     {
-        private IHeroRepository _heroRepository;
+        private readonly IHeroRepository _heroRepository;
+        private readonly ILogger<SuperheroController> _logger;
 
-        public SuperheroController(IHeroRepository heroRepository)
+        public SuperheroController(IHeroRepository heroRepository, ILogger<SuperheroController> logger)
         {
             _heroRepository = heroRepository;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -28,6 +30,7 @@ namespace Superhero.Api.Controllers
             var hero = await _heroRepository.GetHeroById(id);
             if(hero is null)
             {
+                _logger.LogInformation("Hero {Id} is not found.", id);
                 return Result<Hero>.Failure("Hero not found.");
             }
 
@@ -49,6 +52,7 @@ namespace Superhero.Api.Controllers
             var heroResult = await _heroRepository.GetHeroById(id);
             if(heroResult is null)
             {
+                _logger.LogInformation("Hero {Id} is not found.", id);
                 return Result<string>.Failure("Hero not found.");
             } 
 
@@ -59,11 +63,12 @@ namespace Superhero.Api.Controllers
         }
 
         [HttpDelete("remove-hero/{id}")]
-        public async Task<Result<string>> DeleteSupehero(int id)
+        public async Task<Result<string>> DeleteSuperhero(int id)
         {
             var heroResult = await _heroRepository.GetHeroById(id);
             if (heroResult is null)
             {
+                _logger.LogInformation("Hero {Id} is not found.", id);
                 return Result<string>.Failure("Hero not found.");
             }
 
