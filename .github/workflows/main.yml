@@ -28,7 +28,7 @@ jobs:
         uses: microsoft/setup-msbuild@v1.0.2
 
       - name: Test
-        run: dotnet test ./Superhero.sln --no-build --verbosity normal
+        run: dotnet test ~/Superhero.Api.Tests/Superhero.Api.Tests.csproj --no-build --verbosity normal
 
       - name: Publish
         run: dotnet publish ./Superhero.sln --configuration Release --no-build
