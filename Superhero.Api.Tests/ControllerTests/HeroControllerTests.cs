@@ -21,8 +21,8 @@ namespace Superhero.Api.Tests.ControllerTests
         public async void SuperheroController_GetSuperheroes_ReturnOK()
         {
             //Arrange
-            //var heroes = A.Fake<Result<List<Hero>>>();
-            //var heroList = A.Fake<Result<List<Hero>>>();
+            var heroes = A.Fake<Result<List<Hero>>>();
+            var heroList = A.Fake<Result<List<Hero>>>();
             var controller = new SuperheroController(_heroRepository);
 
             //Act
