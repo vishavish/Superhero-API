@@ -5,7 +5,7 @@ VisualStudioVersion = 17.8.34322.80
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superhero.Api", "Superhero.Api\Superhero.Api.csproj", "{8909B5FE-7E5E-4B54-A058-DAFD92AD5520}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superhero.Api.Tests", "Superhero.Api.Tests\Superhero.Api.Tests.csproj", "{2C2AA0CB-0109-4E9D-B315-BF3E542FFDCE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superhero.Api.Tests", "Superhero.Api.Tests\Superhero.Api.Tests.csproj", "{2C2AA0CB-0109-4E9D-B315-BF3E542FFDCE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
