@@ -5,7 +5,7 @@ namespace Superhero.Api.Interfaces
     public interface IHeroRepository
     {
         Task<List<Hero>> GetHeroes(string? searchTerm);
-        Task<Hero> GetHeroById(int id);
+        Task<Hero?> GetHeroById(Guid id);
         Task<bool> Save();
         void AddHero(Hero newHero);
         void UpdateHero(Hero hero);

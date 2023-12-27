@@ -2,7 +2,7 @@
 {
     public class Result<T>
     {
-        private Result(T data, bool isSuccess, string message)
+        public Result(T data, bool isSuccess, string message)
         {
             Data = data;
             IsSuccess = isSuccess;

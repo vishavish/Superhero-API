@@ -19,63 +19,63 @@ namespace Superhero.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<Result<List<Hero>>> GetSuperheroes(string? searchTerm)
+        public async Task<IActionResult> GetSuperheroes(string? searchTerm)
         {
-            return Result<List<Hero>>.Success(await _heroRepository.GetHeroes(searchTerm));
+            return Ok(Result<List<Hero>>.Success(await _heroRepository.GetHeroes(searchTerm)));
         }
 
         [HttpGet("get-hero/{id}")]
-        public async Task<Result<Hero>> GetSuperheroById(int id)
+        public async Task<IActionResult> GetSuperheroById(Guid id)
         {
             var hero = await _heroRepository.GetHeroById(id);
             if(hero is null)
             {
                 _logger.LogInformation("Hero {Id} is not found.", id);
-                return Result<Hero>.Failure("Hero not found.");
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Couldn't find an hero with id {id}");
             }
 
-            return Result<Hero>.Success(hero);
+            return Ok(Result<Hero>.Success(hero));
         }
 
         [HttpPost]
-        public async Task<Result<Hero>> CreateSuperhero(Hero hero)
+        public async Task<IActionResult> CreateSuperhero(Hero hero)
         {
             _heroRepository.AddHero(hero);
             await _heroRepository.Save();
 
-            return Result<Hero>.Success(hero);
+            return Ok(Result<Hero>.Success(hero));
         }
 
         [HttpPut("update-hero/{id}")]
-        public async Task<Result<string>> UpdateSuperhero(int id, Hero hero)
+        public async Task<IActionResult> UpdateSuperhero(Guid id, Hero hero)
         {
             var heroResult = await _heroRepository.GetHeroById(id);
             if(heroResult is null)
             {
                 _logger.LogInformation("Hero {Id} is not found.", id);
-                return Result<string>.Failure("Hero not found.");
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Couldn't find an hero with id {id}");
             } 
 
             _heroRepository.UpdateHero(hero);
             await _heroRepository.Save();
 
-            return Result<string>.Success("Successfully updated hero.");
+            return Ok(Result<string>.Success("Successfully updated hero."));
         }
 
         [HttpDelete("remove-hero/{id}")]
-        public async Task<Result<string>> DeleteSuperhero(int id)
+        public async Task<IActionResult> DeleteSuperhero(Guid id)
         {
             var heroResult = await _heroRepository.GetHeroById(id);
             if (heroResult is null)
             {
                 _logger.LogInformation("Hero {Id} is not found.", id);
-                return Result<string>.Failure("Hero not found.");
+                return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Couldn't find an hero with id {id}");
             }
 
             _heroRepository.RemoveHero(heroResult);
             await _heroRepository.Save();
 
-            return Result<string>.Success("Sucessfully deleted hero.");
+            return Ok(Result<string>.Success("Sucessfully deleted hero."));
         }
     }
 }

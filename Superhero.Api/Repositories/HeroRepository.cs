@@ -14,8 +14,7 @@ namespace Superhero.Api.Repositories
             _context = context;
         }
 
-        #pragma warning disable CS8603
-        public async Task<Hero> GetHeroById(int id)
+        public async Task<Hero?> GetHeroById(Guid id)
         {
             return await _context.Heroes.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
         }
