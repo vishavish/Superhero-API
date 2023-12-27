@@ -23,9 +23,9 @@ jobs:
 
       - name: Build
         run: dotnet build ./Superhero.sln --configuration Release --no-restore
-
+        
       - name: Test
-        run: dotnet test ./Superhero.sln --no-build --verbosity normal
+        run: dotnet test ./Superhero.sln --no-restore --verbosity normal
 
       - name: Publish
         run: dotnet publish ./Superhero.sln --configuration Release --no-build
