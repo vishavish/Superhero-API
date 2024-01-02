@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Superhero.Api.Entities;
 using Superhero.Api.Interfaces;
 using Superhero.Api.Models;
 
 namespace Superhero.Api.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class SuperheroController : ControllerBase
