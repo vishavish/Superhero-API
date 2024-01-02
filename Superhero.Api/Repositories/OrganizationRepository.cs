@@ -16,16 +16,12 @@ namespace Superhero.Api.Repositories
 
         public async Task<List<Organization>> GetOrganizations()
         {
-            return await _context.Organizations 
-                .AsNoTracking()
-                .ToListAsync();
+            return await _context.Set<Organization>().AsNoTracking().ToListAsync();
         }
 
         public async Task<Organization?> GetOrganizationById(Guid id)
         {
-            return await _context.Organizations
-                .AsNoTracking()
-                .FirstOrDefaultAsync(o => o.Id == id);
+            return await _context.Set<Organization>().FirstOrDefaultAsync(o => o.Id == id);
 
         }
 
@@ -36,18 +32,18 @@ namespace Superhero.Api.Repositories
 
         public void AddOrganization(Organization newOrganization)
         {
-            _context.Organizations.Add(newOrganization);
+            _context.Set<Organization>().Add(newOrganization);
         }
 
         public void UpdateOrganization(Organization organization)
         {
             _context.Entry(organization).State = EntityState.Modified;
-            _context.Organizations.Update(organization);
+            _context.Set<Organization>().Update(organization);
         }
 
         public void RemoveOrganization(Organization organization)
         {
-            _context.Organizations.Remove(organization);
+            _context.Set<Organization>().Remove(organization);
         }
 
     }

@@ -16,17 +16,13 @@ namespace Superhero.Api.Repositories
 
         public async Task<Hero?> GetHeroById(Guid id)
         {
-            return await _context.Heroes
-                    .AsNoTracking()
-                    .Include(h => h.Organization)
-                    .FirstOrDefaultAsync(h => h.Id == id);
+            return await _context.Heroes.AsNoTracking().FirstOrDefaultAsync(h => h.Id == id);
         }
 
         public async Task<List<Hero>> GetHeroes(string? searchTerm)
         {
             return await _context.Heroes
                     .AsNoTracking()
-                    .Include(h => h.Organization)
                     .Where(h => h.HeroName!.Contains(searchTerm ?? ""))
                     .ToListAsync();
         }

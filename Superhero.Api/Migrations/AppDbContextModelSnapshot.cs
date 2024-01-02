@@ -33,9 +33,6 @@ namespace Superhero.Api.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<Guid?>("OrganizationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("PowerLevel")
                         .HasColumnType("int");
 
@@ -45,8 +42,6 @@ namespace Superhero.Api.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrganizationId");
 
                     b.ToTable("Heroes");
                 });
@@ -65,15 +60,6 @@ namespace Superhero.Api.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Organizations");
-                });
-
-            modelBuilder.Entity("Superhero.Api.Entities.Hero", b =>
-                {
-                    b.HasOne("Superhero.Api.Entities.Organization", "Organization")
-                        .WithMany()
-                        .HasForeignKey("OrganizationId");
-
-                    b.Navigation("Organization");
                 });
 #pragma warning restore 612, 618
         }

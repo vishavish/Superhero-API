@@ -33,7 +33,9 @@ namespace Superhero.Api.Middlewares
                     Detail = "An internal server error has occured."
                 };
 
-                await context.Response.WriteAsync(JsonSerializer.Serialize(problem));
+                var json = JsonSerializer.Serialize(problem);
+
+                await context.Response.WriteAsync(json);
 
                 context.Response.ContentType = "application/json";
 			}

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Superhero.Api.Extension
 {
-    public static class ValidationExtension
+    public static class DependencyInjection
     {
         public static IServiceCollection AddValidation(this IServiceCollection services)
         {

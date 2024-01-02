@@ -1,12 +1,10 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Superhero.Api.Entities;
 using Superhero.Api.Interfaces;
 using Superhero.Api.Models;
 
 namespace Superhero.Api.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrganizationController : ControllerBase
@@ -73,9 +71,6 @@ namespace Superhero.Api.Controllers
                 _logger.LogInformation("Organization {Id} was not found.", id);
                 return Problem(statusCode: StatusCodes.Status404NotFound, detail: $"Organization {id} was not found.");
             }
-
-            _organizationRepository.RemoveOrganization(org);
-            await _organizationRepository.Save();
 
             return Ok(Result<Guid>.Success(id));
         }
