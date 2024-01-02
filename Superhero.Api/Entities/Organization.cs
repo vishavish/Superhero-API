@@ -4,6 +4,6 @@
     {
         public Guid Id { get; set; }
         public string? Name { get; set; }
-        List<Hero> Heroes { get; set; }
+        List<Hero> Heroes { get; set; } = new();
     }
 }
