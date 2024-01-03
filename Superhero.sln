@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superhero.Api", "Superhero.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Superhero.Api.Tests", "Superhero.Api.Tests\Superhero.Api.Tests.csproj", "{2C2AA0CB-0109-4E9D-B315-BF3E542FFDCE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Superhero.Api.Client", "Superhero.Api.Client\Superhero.Api.Client.csproj", "{CE1D75B3-FB3A-40C9-AB49-7FE80AC673DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{2C2AA0CB-0109-4E9D-B315-BF3E542FFDCE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C2AA0CB-0109-4E9D-B315-BF3E542FFDCE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C2AA0CB-0109-4E9D-B315-BF3E542FFDCE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE1D75B3-FB3A-40C9-AB49-7FE80AC673DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE1D75B3-FB3A-40C9-AB49-7FE80AC673DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE1D75B3-FB3A-40C9-AB49-7FE80AC673DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE1D75B3-FB3A-40C9-AB49-7FE80AC673DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
