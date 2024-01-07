@@ -1,23 +1,24 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Superhero.Api.Entities;
+using Superhero.Api.Entities.Auth;
 using System.Reflection;
 
-namespace Superhero.Api.Context
+namespace Superhero.Api.Context;
+
+public class AppDbContext : IdentityDbContext<ApplicationUser>
 {
-    public class AppDbContext : DbContext
+    public AppDbContext(DbContextOptions<AppDbContext> options) 
+        : base(options) 
+    { }
+
+    public DbSet<Hero>? Heroes { get; set; } = null;
+    public DbSet<Organization>? Organizations { get; set; } = null;
+
+    protected override void OnModelCreating(ModelBuilder builder)
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) 
-            : base(options) 
-        { }
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-        public DbSet<Hero>? Heroes { get; set; } = null;
-        public DbSet<Organization>? Organizations { get; set; } = null;
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-            base.OnModelCreating(modelBuilder);
-        }
+        base.OnModelCreating(builder);
     }
 }

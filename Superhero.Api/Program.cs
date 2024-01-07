@@ -4,9 +4,10 @@ using Superhero.Api.Interfaces;
 using Superhero.Api.Repositories;
 using Superhero.Api.Middlewares;
 using Superhero.Api.Extension;
+using Microsoft.AspNetCore.Identity;
+using Superhero.Api.Entities.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 builder.Services.AddControllers();
 
@@ -19,7 +20,18 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddAuth("THIS IS MY SECRET KEY: appsecret123789");
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = true;
+    options.Password.RequireDigit = true;
+    options.Password.RequireUppercase = true;
+    options.Password.RequireLowercase = true;
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.AddAuth(builder.Configuration);
 builder.Services.AddValidation();
 builder.Services.AddServices();
 builder.Services.AddTransient<GlobalExceptionHandlingMiddleware>();
@@ -31,8 +43,9 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.ApplyMigrations();
 }
+
+await app.InitializeDb();
 
 app.UseHttpsRedirection();
 

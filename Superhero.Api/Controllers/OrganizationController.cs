@@ -26,7 +26,7 @@ namespace Superhero.Api.Controllers
             return Ok(await _organizationRepository.GetOrganizations());
         }
 
-        [HttpGet("get-organization/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetOrganizationById(Guid id)
         {
             var organization = await _organizationRepository.GetOrganizationById(id);
@@ -48,7 +48,7 @@ namespace Superhero.Api.Controllers
             return Ok(Result<Organization>.Success(organization));
         }
 
-        [HttpPut("update-organization/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateOrganization(Guid id, Organization organization)
         {
             var org = await _organizationRepository.GetOrganizationById(id);
@@ -64,7 +64,7 @@ namespace Superhero.Api.Controllers
             return Ok(Result<Organization>.Success(organization));
         }
 
-        [HttpDelete("remove-organization/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> RemoveOrganization(Guid id)
         {
             var org = await _organizationRepository.GetOrganizationById(id);

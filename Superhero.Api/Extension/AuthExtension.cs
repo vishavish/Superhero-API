@@ -6,7 +6,7 @@ namespace Superhero.Api.Extension
 {
     public static class AuthExtension
     {
-        public static IServiceCollection AddAuth(this IServiceCollection services, string token)
+        public static IServiceCollection AddAuth(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(options =>
             {
@@ -22,9 +22,9 @@ namespace Superhero.Api.Extension
                     ValidateIssuer = true,
                     ValidateIssuerSigningKey = true,
                     ValidateLifetime = true,
-                    ValidIssuer = "https://localhost:44315/api/auth",
-                    ValidAudience = "https://localhost:44315/api",
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(token))
+                    ValidIssuer = configuration["JWT:ValidIssuer"],
+                    ValidAudience = configuration["JWT:ValidAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(configuration["JWT:Secret"]))
                 };
             });
 

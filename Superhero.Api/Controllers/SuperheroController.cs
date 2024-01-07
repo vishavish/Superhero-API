@@ -26,7 +26,7 @@ namespace Superhero.Api.Controllers
             return Ok(Result<List<Hero>>.Success(await _heroRepository.GetHeroes(searchTerm)));
         }
 
-        [HttpGet("get-hero/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetSuperheroById(Guid id)
         {
             var hero = await _heroRepository.GetHeroById(id);
@@ -48,7 +48,7 @@ namespace Superhero.Api.Controllers
             return Ok(Result<Hero>.Success(hero));
         }
 
-        [HttpPut("update-hero/{id}")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateSuperhero(Guid id, Hero hero)
         {
             var heroResult = await _heroRepository.GetHeroById(id);
@@ -64,7 +64,7 @@ namespace Superhero.Api.Controllers
             return Ok(Result<string>.Success("Successfully updated hero."));
         }
 
-        [HttpDelete("remove-hero/{id}")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteSuperhero(Guid id)
         {
             var heroResult = await _heroRepository.GetHeroById(id);

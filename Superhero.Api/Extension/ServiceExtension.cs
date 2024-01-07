@@ -1,4 +1,5 @@
-﻿using Superhero.Api.Interfaces;
+﻿using Superhero.Api.Context;
+using Superhero.Api.Interfaces;
 using Superhero.Api.Repositories;
 
 namespace Superhero.Api.Extension
@@ -9,6 +10,7 @@ namespace Superhero.Api.Extension
         {
             services.AddScoped<IHeroRepository, HeroRepository>();
             services.AddScoped<IOrganizationRepository, OrganizationRepository>();
+            services.AddScoped<AppDbInitializer>();
 
             return services;
         }

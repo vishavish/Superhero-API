@@ -1,21 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Superhero.Api.Context;
+﻿using Superhero.Api.Context;
 
 namespace Superhero.Api.Extension
 {
     public static class MigrationExtension
     {
-        public static void ApplyMigrations(this IApplicationBuilder app) 
+        public static async Task InitializeDb(this WebApplication app) 
         {
-            using IServiceScope scope =
-                app.ApplicationServices
-                .CreateScope();
+            using IServiceScope scope = app.Services.CreateScope();
 
-            using AppDbContext dbContext =
-                scope.ServiceProvider
-                .GetRequiredService<AppDbContext>();
+            var initializer = scope.ServiceProvider.GetRequiredService<AppDbInitializer>();
 
-            dbContext.Database.Migrate();
+            await initializer.InitiailzeAsync();
         }
     }
 }

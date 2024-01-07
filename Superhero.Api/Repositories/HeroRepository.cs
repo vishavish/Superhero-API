@@ -17,7 +17,7 @@ namespace Superhero.Api.Repositories
         public async Task<Hero?> GetHeroById(Guid id)
         {
             return await _context.Heroes
-                    .AsNoTracking()
+                    !.AsNoTracking()
                     .Include(h => h.Organization)
                     .FirstOrDefaultAsync(h => h.Id == id);
         }
@@ -25,7 +25,7 @@ namespace Superhero.Api.Repositories
         public async Task<List<Hero>> GetHeroes(string? searchTerm)
         {
             return await _context.Heroes
-                    .AsNoTracking()
+                    !.AsNoTracking()
                     .Include(h => h.Organization)
                     .Where(h => h.HeroName!.Contains(searchTerm ?? ""))
                     .ToListAsync();
@@ -38,18 +38,18 @@ namespace Superhero.Api.Repositories
 
         public void AddHero(Hero newHero)
         {
-            _context.Heroes.Add(newHero);
+            _context.Heroes!.Add(newHero);
         }
 
         public void RemoveHero(Hero hero)
         {
-            _context.Heroes.Remove(hero);
+            _context.Heroes!.Remove(hero);
         }
 
         public void UpdateHero(Hero hero)
         {
             _context.Entry(hero).State = EntityState.Modified;
-            _context.Heroes.Update(hero);
+            _context.Heroes!.Update(hero);
         }
     }
 }

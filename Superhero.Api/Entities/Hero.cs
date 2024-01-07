@@ -2,7 +2,7 @@
 {
     public class Hero
     {
-        public Guid Id { get; set; }
+        public Guid Id { get; init; }
         public string? HeroName { get; set; }
         public string? Superpower { get; set; }
         public int PowerLevel { get; set; }

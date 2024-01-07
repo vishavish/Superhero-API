@@ -1,8 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Superhero.Api.Entities.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Superhero.Api.Models;
+using Superhero.Api.Extension;
 
 namespace Superhero.Api.Controllers
 {
@@ -10,35 +14,82 @@ namespace Superhero.Api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        [HttpPost("get-token")]
-        public async Task<IActionResult> GetToken()
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IConfiguration _configuration;
+
+        public AuthController(
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
         {
-            return Ok(GenerateToken("sample"));
+            _userManager = userManager;
+            _configuration = configuration;
         }
 
-        private string GenerateToken(string username)
+        [HttpPost("login")]
+        public async Task<ActionResult<ProblemDetails>> Login([FromBody] LoginModel login)
         {
-            //TODO: Replace "secretKey" with actual token from appsettings.json
-            const string secretKey = "THIS IS MY SECRET KEY: appsecret123789";
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
-            var creds = new SigningCredentials(key,SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor = new SecurityTokenDescriptor
+            var user = await _userManager.FindByNameAsync(login.Username);
+            if (user == null || !await _userManager.CheckPasswordAsync(user!, login.Password))
             {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, username)
-                }),
-                Expires = DateTime.Now.AddDays(3),
-                SigningCredentials = creds,
-                Issuer = "https://localhost:44315/api/auth",
-                Audience = "https://localhost:44315/api"
+                return Result<string>.Failure("Invalid username or password.").ToProblem(401);
+            }
+
+            var userRoles = await _userManager.GetRolesAsync(user!);
+            var authClaims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user!.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+            authClaims.AddRange(userRoles.Select(r => new Claim(ClaimTypes.Role, r)));
 
-            return tokenHandler.WriteToken(token);
+            var token = GenerateToken(authClaims);
+            return Ok(
+                Result<TokenResponse>.Success(
+                    new TokenResponse 
+                    { 
+                        Token = new JwtSecurityTokenHandler().WriteToken(token), 
+                        Expiration = token.ValidTo 
+                    }));
+        }
+
+        [HttpPost]
+        [Route("register")]
+        public async Task<ActionResult<ProblemDetails>> Register([FromBody] RegisterModel model)
+        {
+            var userExists = await _userManager.FindByNameAsync(model.Username);
+            if (userExists != null)
+                return Ok(Result<string>.Success("Invalid username or password."));
+
+            ApplicationUser user = new()
+            {
+                Email = model.Email,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                UserName = model.Username
+            };
+            
+            var result = await _userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
+                return Result<string>.Failure("Something happened while processing the record").ToProblem(500);
+
+            await _userManager.AddToRoleAsync(user, Roles.User);
+
+            return Ok(Result<string>.Success("User created!"));
+        }
+
+        private JwtSecurityToken GenerateToken(List<Claim> authClaims)
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["JWT:ValidIssuer"],
+                audience: _configuration["JWT:ValidAudience"],
+                expires: DateTime.Now.AddHours(3),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+            );
+
+            return token;
         }
 
     }
